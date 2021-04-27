@@ -1,0 +1,49 @@
+<div class="action-bar">
+    <div class="left-side">
+        <aapi-searchbox (searchText)="searchList($event); searchStr=$event"></aapi-searchbox>
+        <img src="/pages-aapi-services/assets/usmt/filter.png">
+    </div>
+    <div class="right-side">
+        <img src="/pages-aapi-services/assets/usmt/grid.png" (click)="setViewType('grid')"
+            [class.selected]="viewType=='grid'">
+        <img src="/pages-aapi-services/assets/usmt/list.png" (click)="setViewType('list')"
+            [class.selected]="viewType=='list'">
+
+    </div>
+</div>
+<div *ngIf="userData" #content class="content">
+    <div [ngStyle]="getScrollLeft()" class="view-scroll-div">
+        <div [ngStyle]="getViewWidth()" class="grid-view">
+            <div class="grid-tile" *ngFor="let user of searchedUserData">
+                <!-- <div class="grid-tile" *ngFor="let user of userData"> -->
+                <div class="info">
+                    <div class="photo">
+                        <img [src]="user.icon" onError="this.src='/pages-aapi-services/assets/usmt/profile_photo.png'">
+                    </div>
+                    <div class="name">
+                        {{user.name || user.email}}
+                    </div>
+                    <div class="status {{user.role}}">
+                        {{user.role}}
+                    </div>
+                </div>
+                <div class="action">
+                   
+                    <img src="/pages-aapi-services/assets/usmt/settings.png" (click)="addUserModal=true">
+                    
+                    <img src="/pages-aapi-services/assets/usmt/delete.png" (click)="deleteUserConfirm(user)">
+                </div>
+            </div>
+        </div>
+        <div [ngStyle]="getViewWidth()" class="list-view">
+            <aapi-table [columns]="userColumns" [data]="searchedUserData"></aapi-table>
+            <!-- <aapi-table [columns]="userColumns" [data]="userData"></aapi-table>  -->
+        </div>
+    </div>
+</div> 
+
+<ng-container *ngIf="addUserModal">
+    <user-add-modal (closeModal)="addUserModal=false"></user-add-modal>
+  </ng-container>
+
+<aapi-confirm-box></aapi-confirm-box>

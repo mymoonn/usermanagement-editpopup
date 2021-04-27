@@ -1,0 +1,18 @@
+<div class="user-add-modal-backdrop" (click)="doCloseModal()"></div>
+<div class="user-add-modal-content">
+    <div class="entry-list">
+        <div class="entry-row" *ngFor="let user of userList;let i=index">
+            <input type="email" [class.invalid]="!user.email" [(ngModel)]="user.email" placeholder="Email"
+                (change)="autoAddUserRow()">
+            <ng-select [class.invalid]="!user.role" class="account-selection-dropdown" placeholder="Role"
+                (change)="autoAddUserRow()" [clearable]="false" [closeOnSelect]="true" [(ngModel)]="user.role"
+                [items]="roleList" bindLabel="rolename" bindValue="roleid">
+            </ng-select>
+            <img (click)="deleteRow(user)" class="delete" src="/pages-aapi-services/assets/usmt/delete.png">
+        </div>
+    </div>
+    <div class="entry-action">
+        <button (click)="initData()" class="cancel">Clear</button>
+        <button (click)="saveUsers()" class="add">Add</button>
+    </div>
+</div>

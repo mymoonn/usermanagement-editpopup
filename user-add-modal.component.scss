@@ -1,0 +1,103 @@
+.user-add-modal-backdrop {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+}
+.user-add-modal-content {
+    position: fixed;
+    width: 422px;
+    right: 500px;
+    top: 118px;
+    height: max-content;
+    padding: 20px 25px;
+    background: #0000008a;
+    border-radius: 5px;
+    background: #000000b0;
+    backdrop-filter: blur(50px);
+    border-radius: 10px;
+    text-align: center;
+}
+.entry-list{
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+.entry-action {
+    display: flex;
+    border-top: 1px solid white;
+    justify-content: space-between;
+    button {
+        font-family: Poppins;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 0px;
+        color: white;
+        padding: 8px 20px;
+        padding-top: 10px;
+        margin-top: 10px;
+        &.add {
+            background: #F2994A;
+        }
+        &.cancel {
+            background: transparent;
+        }
+    }
+}
+::ng-deep {
+    .entry-row {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+        input, ng-select {
+            font-family: Poppins;
+            font-style: normal;
+            color: white;
+            font-weight: normal;
+            font-size: 14px;
+            outline: none;
+            border: 0px;
+            flex: 2;
+            background: transparent;
+            margin-right: 10px;
+        }
+        ng-select.invalid.ng-touched {
+            border-radius: 3px;
+            border: 1px solid red;
+        }
+        input.invalid.ng-touched {
+            border: 1px solid red;
+            padding: 7.5px;
+            border-radius: 3px;
+        }
+        .ng-select-container {
+                    
+            color: white;
+           background: black!important;
+            border: 0px;
+        }
+        ng-dropdown-panel {
+            background: transparent;
+        }
+        .ng-dropdown-panel-items {
+            background: #252525d4!important;
+        }
+        .ng-option{
+            background: #252525d4!important;
+            color: white!important;
+        }
+        .ng-option.ng-option-marked {
+            background: #5d5d5d!important;
+            color: white!important;
+            border: 0px;
+        }
+        img.delete {
+            flex-shrink: 0;
+            flex-grow: 0;
+            align-self: center;
+        }
+    }
+}

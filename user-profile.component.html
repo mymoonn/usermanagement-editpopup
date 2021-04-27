@@ -1,0 +1,304 @@
+<ng-container *ngIf="!loading">
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="d-flex align-items-center">
+        <div class="back-container">
+          <img (click)="goBack()" src="pages-aapi-services/assets/icons/arrow-left.svg">
+          <img src="pages-aapi-services/assets/icons/logo_abstract_color.svg">
+        </div>
+        <span class="text-profile">Profile</span>
+      </div>
+      <div class="prof-btn-div" *ngIf="tabSelected === 'information'">
+        <button class="btn-update-profile" (click)="updateProfile()">
+          <span class="d-md-none">UPDATE</span>
+          <span class="d-none d-md-block">UPDATE PROFILE</span>
+        </button>
+      </div>
+
+    </div>
+    <div class="profile-bottom-container">
+      <div class="left-side">
+        <div class="bottom-header">
+          <div class="bottom-tab-title">
+            <ng-container *ngFor="let title of tabTitles;let i = index ">
+              <button (click)="switchTab(i)" class="mx-3 tab-button"
+                [class.tab-selected]="title.selected">{{title.title}}</button>
+              <!-- <button [class.tab-selected]="tabTitles.authorizations">AUTHORIZATIONS</button>
+                    <button [class.tab-selected]="tabTitles.usermanagement">USER MANAGEMENT</button> -->
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="right-side">
+        <div *ngIf="tabSelected=='user management' && getScope('addUser')" (click)="addUserModal=true"
+          class="action-add-user">
+          <img src="/pages-aapi-services/assets/usmt/plus.png"> Add User
+        </div>
+        <div *ngIf="tabSelected=='organizations' && isAapiAdmin" (click)="addOrgModal=true" class="action-add-user">
+          <img src="/pages-aapi-services/assets/usmt/plus.png"> Add Organization
+        </div>
+      </div>
+    </div>
+
+   <ng-container #information *ngIf="tabSelected=='information'">
+      <div class="imgpopover test-div" [ngStyle]="getTempBG()" *ngIf="displayBGMOdal">
+        <ng-container *ngTemplateOutlet="imagePopover"></ng-container>
+      </div>
+      <div class="info-container">
+        <div class="profile-body-container" *ngIf="!displayBGMOdal">
+          <div class="prof-image-container">
+            <div class="prof-pic-container">
+              <div class="profile-pic-div">
+                <img *ngIf="profPicture" onerror="this.src='/pages-aapi-services/assets/logos/user2.jpeg'"
+                  [src]="profPicture">
+              </div>
+              <input #proPicUpload type="file" class="custom-file-input" name="proPicUpload" id="proPicUpload"
+                (change)="uploadImageFile('LOGO',$event)" accept="image/x-png,image/gif,image/jpeg" />
+              <button class="update-btn" (click)="proPicUpload.click()">UPLOAD NEW AVATAR</button>
+            </div>
+            <div class="prof-bg-container">
+              <div class="prof-bg-image-div" [ngStyle]="getBG()">
+      
+              </div>
+              <button *ngIf="getScope('bg')" class="update-btn" (click)="openBGModal()">UPDATE WORKSPACE
+                BACKGROUND</button>
+      
+            </div>
+          </div>
+      
+          <div class="information-input-container">
+            <div class="prof-info-row">
+              <div class="information-div">
+                <div class="default-org">
+                  <div class="default-org-label">
+                    Default Org
+                  </div>
+                  <div class="default-org-checkbox">
+                    <config-checkbox></config-checkbox>
+                  </div>
+                  <!-- <input type="checkbox"> -->
+                </div>
+                <label>Organization Display Name</label>
+                <input class="org-name" [(ngModel)]="displayName" type="text" [readonly]="!getScope('bg')">
+                <label class="sideeffects-label">Changing Organization name can have <span class="sideeffects"
+                    [tooltip]="getSideEffectsMessage()">unintended
+                    side effects</span>.</label>
+              </div>
+              <div class="information-div">
+                <label>Email(will be public)</label>
+                <input [(ngModel)]="mail" type="text" [readonly]="!getScope('bg')">
+                <label>&nbsp;</label>
+              </div>
+            </div>
+            <div class="prof-info-row" *ngIf="isOrgOwner">
+              <div class="information-div">
+                <label>First Name</label>
+                <input [(ngModel)]="userFirstName" type="text">
+              </div>
+              <div class="information-div">
+                <label>Last Name</label>
+                <input [(ngModel)]="userLastName" type="text">
+              </div>
+            </div>
+            <div class="prof-info-row">
+              <div class="information-div">
+                <label>URL</label>
+                <input [(ngModel)]="url" type="text">
+              </div>
+              <div class="information-div">
+                <label>LOCATION</label>
+                <input [(ngModel)]="location" type="text" [readonly]="!getScope('bg')">
+              </div>
+            </div>
+            <div class="prof-info-row">
+              <div class="information-div desc-div">
+                <label>DESCRIPTION</label>
+                <textarea [(ngModel)]="description" [readonly]="!getScope('bg')"></textarea>
+                <div class="desc-length">{{description.length}}/500</div>
+              </div>
+      
+            </div>
+          </div>
+        </div>
+      
+      </div>
+
+    </ng-container> 
+
+
+
+    <ng-container #integrations *ngIf="tabSelected=='integrations' && !displayBGMOdal">
+      <div class="integrations-wrapper tab-content">
+        <aapi-service-integrations [isAapiAdmin]="isAapiAdmin"></aapi-service-integrations>
+      </div>
+    </ng-container>
+    <ng-container #organizationsTab *ngIf="tabSelected=='organizations' && !displayBGMOdal">
+      <div class="tab-body">
+        <aapi-organizations-management></aapi-organizations-management>
+      </div>
+    </ng-container>
+    <ng-container #information *ngIf="tabSelected=='authorizations' && !displayBGMOdal">
+      <div class="authorizations-input-container tab-content">
+        <div class="search-header-container">
+          <div class="search-header">
+            <img src="pages-aapi-services/assets/icons/search.png">
+            <input type="text" id="search">
+          </div>
+        </div>
+        <div class="auth-container">
+          <div class="auth-container-header">
+            <div class="auth-title">oAuth Apps</div>
+            <div class="auth-notify">3</div>
+            <div class="auth-input-div">
+              <input type="text">
+              <!-- <ngx-select-dropdown class="defaultSelect" [config]="config" [options]="dropdownSelect" container="body" [(ngModel)]="privacyModel" [multiple]="false"></ngx-select-dropdown> -->
+              <div class="select"><i class="fa arrow   defaultArrow fa-angle-down " aria-hidden="true"></i>
+              </div>
+
+            </div>
+          </div>
+          <div class="auth-container-body">
+            <div class="auth-tile">
+              <div class="auth-title">cloudmain</div>
+              <div class="auth-actions"><img src="/pages-aapi-services/assets/icons/configure.svg">
+                <img src="/pages-aapi-services/assets/icons/trash.png">
+                <img src="/pages-aapi-services/assets/icons/copy.png">
+              </div>
+            </div>
+            <div class="auth-tile">
+              <div class="auth-title">Slack</div>
+              <div class="auth-actions"><img src="/pages-aapi-services/assets/icons/configure.svg">
+                <img src="/pages-aapi-services/assets/icons/trash.png">
+                <img src="/pages-aapi-services/assets/icons/copy.png">
+              </div>
+            </div>
+            <div class="auth-tile">
+              <div class="auth-title">GitHub</div>
+              <div class="auth-actions"><img src="/pages-aapi-services/assets/icons/configure.svg">
+                <img src="/pages-aapi-services/assets/icons/trash.png">
+                <img src="/pages-aapi-services/assets/icons/copy.png">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="auth-container">
+          <div class="auth-container-header">
+            <div class="auth-title auth-width">Keys Assigned from this Organization</div>
+            <div class="auth-notify">1</div>
+            <div class="auth-input-div">
+              <input type="text">
+              <!-- <ngx-select-dropdown class="defaultSelect" [config]="config" [options]="dropdownSelect" container="body" [(ngModel)]="privacyModel" [multiple]="false"></ngx-select-dropdown> -->
+              <div class="select"><i class="fa arrow   defaultArrow fa-angle-down " aria-hidden="true"></i>
+              </div>
+
+            </div>
+          </div>
+          <div class="auth-container-body">
+            <div class="auth-tile">
+              <div class="auth-title">cloudmain</div>
+              <div class="auth-actions"><img src="/pages-aapi-services/assets/icons/configure.svg">
+                <img src="/pages-aapi-services/assets/icons/trash.png">
+                <img src="/pages-aapi-services/assets/icons/copy.png">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="auth-container">
+          <div class="auth-container-header">
+            <div class="auth-title auth-width">Keys Assigned to other Organization</div>
+            <div class="auth-notify auth-empty">0</div>
+            <div class="auth-input-div">
+              <input type="text">
+              <!-- <ngx-select-dropdown class="defaultSelect" [config]="config" [options]="dropdownSelect" container="body" [(ngModel)]="privacyModel" [multiple]="false"></ngx-select-dropdown> -->
+              <div class="select"><i class="fa arrow   defaultArrow fa-angle-down " aria-hidden="true"></i>
+              </div>
+
+            </div>
+          </div>
+          <!-- <div class="auth-container-body">
+                       <div class="auth-tile">
+                           <div class="auth-title">cloudmain</div>
+                           <div class="auth-actions"><img src="/pages-aapi-services/assets/icons/configure.svg">
+                            <img src="/pages-aapi-services/assets/icons/trash.png">
+                            <img src="/pages-aapi-services/assets/icons/copy.png">
+                        </div>
+                       </div>
+                    </div> -->
+        </div>
+      </div>
+
+    </ng-container>
+    <ng-container #usermanagement *ngIf="tabSelected=='user management'">
+      <div class="tab-body">
+        <app-user-management></app-user-management>
+      </div>
+    </ng-container>
+    <ng-template #imagePopover>
+      <div class="image-popover">
+        <div class="popover-container">
+          <div class="popover-title">Select Your Background</div>
+          <div class="close-btn" (click)="closeBGModal()"><img src="pages-aapi-services/assets/icons/x.png"></div>
+        </div>
+        <div class="popover-body">
+          <div class="popover-body-container">
+            <div class="popover-body-header">
+              <div class="popover-body-title">
+                <ng-container *ngFor="let title of popoverTitles;let i = index ">
+                  <button (click)="switchPopoverTab(i)" class="tab-button"
+                    [class.tab-selected]="title.selected">{{title.title}}</button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <ng-container #aapiimgs *ngIf="popoverTabSelected=='aapi images'">
+            <div class="body-content">
+              <div class="aapi-img-body">
+                <div class="aapi-img-content" *ngFor="let aapiimg of imgListAapi;let ind = index">
+                  <img [class.active]="aapiimg.url === tempBG" [src]="aapiimg.url" (click)="setTempBG(aapiimg.url)">
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container #myimgs *ngIf="popoverTabSelected=='my images'">
+            <div class="body-content">
+              <div class="upload-img">
+                <div class="upload-btn" (click)="banPicUpload.click()">
+                  <input #banPicUpload type="file" name="banPicUpload" id="banPicUpload"
+                    (change)="uploadImageFile('BANNER',$event)" accept="image/x-png,image/gif,image/jpeg" />
+                  <img src="pages-aapi-services/assets/icons/circle-plus.png">
+                  <div class="upload-text">Upload</div>
+                </div>
+             + </div>
+              <div class="aapi-img-body scrl-body">
+                <div class="aapi-img-content" *ngFor="let upldimg of imgListCustom">
+                  <div class="remove-img" (click)="removeImage(upldimg)">
+                    <img src="pages-aapi-services/assets/icons/x.png" alt="">
+                  </div>
+                  <img [class.active]="tempBG === upldimg.url" [src]="upldimg.url" (click)="setTempBG(upldimg.url)">
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container #colors *ngIf="popoverTabSelected=='colors'">
+            <div class="body-content"></div>
+          </ng-container>
+          <hr class="seperator">
+          <div class="update-img">
+            <button (click)="saveUserBG()" class="updt-btn">UPDATE</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+</ng-container>
+
+<ng-container *ngIf="addUserModal">
+  <user-add-modal (closeModal)="addUserModal=false"></user-add-modal>
+</ng-container>
+<ng-container *ngIf="addOrgModal">
+  <org-add-modal (closeModal)="addOrgModal=false"></org-add-modal>
+</ng-container>
+
+<aapi-confirm-box></aapi-confirm-box>

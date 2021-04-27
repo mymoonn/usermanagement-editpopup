@@ -1,0 +1,176 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+.action-bar {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+    margin: 0px 10px;
+    padding: 10px;
+    align-items: center;
+    height: max-content;
+    .left-side {
+        display: flex;
+        color: white;
+        align-items: center;
+    }
+    .right-side {
+        color: white;
+        display: flex;
+        align-items: center;
+        img {
+            transition: 0.5s all ease;
+            margin-left: 15px;
+            cursor: pointer;
+            &.selected {
+                color:#f2994a;
+            }
+            &:not(.selected) {
+                filter: brightness(4) brightness(0.7);
+            }
+        }
+    }
+}
+.content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+}
+.grid-view {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    overflow: auto;
+    flex-grow: 0;
+    width: 0px;
+}
+.grid-tile {
+
+    color: white;
+    padding: 10px;
+    width: 221px;
+    margin: 10px;
+    height: 193px;
+    background: #00000030;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid white;
+        width: 90%;
+        margin-bottom: 10px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;
+        .photo {
+            border-radius: 50%;
+            overflow: hidden;
+            /* object-fit: contain; */
+            width: 41px;
+            height: 41px;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+        .name {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            font-family: Poppins;
+            margin: 6px 0px;
+            text-align: center;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .status {
+            font-family: Poppins;
+            text-align: center;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            background: rebeccapurple;
+            &.Admin {
+                background: green;
+            }
+        }
+    }
+    .action {
+        display: flex;
+        justify-content: space-between;
+        width: 95%;
+        img {
+            cursor: pointer;
+        }
+    }
+}
+
+.list-view {
+    flex-shrink: 0;
+    height: 100%;
+    flex-grow: 0;
+    width: 0px;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.add-user {
+    display: flex;
+    color: white;
+    align-items: center;
+    cursor: pointer;
+    img {
+        margin-right: 10px;
+    }
+}
+
+::ng-deep {
+    .at-column {
+        &.Member > div {
+            background: blueviolet;
+        }
+        &.Admin > div {
+            background: green!important;
+        }
+    }
+    .action-list .action {
+        position: relative;
+        .lock-icon {
+            transform:scaleX(-1);
+            position:absolute;
+        }
+    }
+}
+
+.view-scroll-div {
+    left: 0px;
+    position: absolute;
+    width: max-content;
+    transition: 0.3s all ease;
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+}
