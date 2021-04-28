@@ -29,7 +29,7 @@
                 </div>
                 <div class="action">
                    
-                    <img src="/pages-aapi-services/assets/usmt/settings.png" (click)="addUserModal=true">
+                    <img src="/pages-aapi-services/assets/usmt/settings.png" (click)="editUserModal=true">
                     
                     <img src="/pages-aapi-services/assets/usmt/delete.png" (click)="deleteUserConfirm(user)">
                 </div>
@@ -42,8 +42,8 @@
     </div>
 </div> 
 
-<ng-container *ngIf="addUserModal">
-    <user-add-modal (closeModal)="addUserModal=false"></user-add-modal>
+<ng-container *ngIf="editUserModal">
+    <user-edit-modal (closeModal)="editUserModal=false"></user-edit-modal>
   </ng-container>
 
 <aapi-confirm-box></aapi-confirm-box>
